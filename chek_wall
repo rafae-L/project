@@ -1,0 +1,58 @@
+#начальная позиция (alpha, w, x0, y0, view_dist, max_operation)
+a_max = [cos(alpha + w), sin(alpha + w)]
+a_min = [cos(alpha - w), sin(alpha - w)]
+
+#из массива с вершинами стен, избираем те, которые теоретически могут оказаться в зоне видимости
+da = 100
+dot_for_use = []
+for i in range(kolvo_sten):
+    #проверяем лежит ли точка в угле обзора
+    counter = 0
+    if((sign((vershin[i].x - x0) * a_max[1] - (vershin[i].y - y0) * a_max[0]) != sign((vershin[i].x - x0) * a_min[1] - (vershin[i].y - y0) * a_min[0]))
+        and ((vershin[i].x - x0)**2 +(vershin[i].y - y0)**2 <= view_dist**2)):
+        dot_for_use.append(i)
+        counter = 1
+        
+    #аналогично для другого края стены (если первый не подсчитался)
+    elif((sign((vershin[i].x1 - x0) * a_max[1] - (vershin[i].y1 - y0) * a_max[0]) != sign((vershin[i].x1 - x0) * a_min[1] - (vershin[i].y1 - y0) * a_min[0]))
+        and ((vershin[i].x1 - x0)**2 +(vershin[i].y1 - y0)**2 <= view_dist**2)):
+        dot_for_use.append(i)
+        counter = 1
+    
+    if(counter == 1):
+        a_pow_2 = (vershin[i].x - x0)**2 + (vershin[i].y - y0)**2
+        b_pow_2 = (vershin[i].x1 - x0)**2 + (vershin[i].y1 - y0)**2
+
+        dw = arccos( (a_pow_2 + b_pow_2 - vershin[i].lenght) / 2 / (a_pow_2 * b_pow_2)**0.5 )
+        if(dw < da):
+            da = dw
+
+
+#ход луча
+kolv = int(2*w / da)
+if(kolv > max_operation) kolv = max_operation
+touch_wall = 0
+
+#находим точки, которые будем отрисовывать
+for j in range(kolv)
+    r_pow_2 = view_dist
+    x_c = 0
+    y_c = 0
+    a = [cos(alpha + w - j*da), sin(alpha + w - j*da)]
+    for p in range(len(dot_for_use)):
+        #проверка того что края стены находятся с разных сторон луча
+        i = dot_for_use[p]
+        if(sign((vershin[i].x - x0) * a[1] - (vershin[i].y - y0) * a[0]) != sign((vershin[i].x - x0) * a[1] - (vershin[i].y - y0) * a[0])):
+            n = [sin(alpha + w - j*da), cos(alpha + w - j*da)]
+
+            x = ....
+            y = ....
+
+            if(x**2 + y**2 < r_pow_2):
+                r_pow_2 = x**2 + y**2
+                x_c = x
+                y_c = x
+
+                touch_wall = 1
+        else:
+             touch_wall = 0 
